@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vantix · Ejecución</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+  <header>
+    <span class="logo">VANTIX BETA</span>
+    <nav>
+      <a href="panel.html">Panel</a>
+      <a href="acciones.html">Acciones</a>
+      <a href="historial.html">Historial</a>
+      <a id="nav-auditoria" href="auditoria.html">Auditoría</a>
+    </nav>
+    <div class="usuario"><span id="nombre-usuario"></span><button id="salir" class="secundario">Salir</button></div>
+  </header>
+  <main>
+    <p id="aviso" class="aviso"></p>
+    <h1 id="titulo">Ejecución</h1>
+    <div class="tarjeta">
+      <h2>Estado: <span id="estado"></span></h2>
+      <p id="fechas"></p>
+      <div id="acciones"></div>
+    </div>
+    <h2>Comando que se ejecutará</h2>
+    <pre><code id="comando"></code></pre>
+    <h2>Hallazgos</h2>
+    <div class="tarjeta" id="hallazgos"></div>
+  </main>
+  <div class="flotantes"><button data-chat title="Chatbot">IA</button><button data-chat title="WhatsApp">WA</button></div>
+  <script type="module" src="js/paginas/ejecucion.js"></script>
+</body>
+</html>

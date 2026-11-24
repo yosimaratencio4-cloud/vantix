@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vantix · Iniciar sesión</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+  <main id="login" class="tarjeta">
+    <h1>Vantix · Beta</h1>
+    <p>Auditor de seguridad para técnicos.</p>
+    <form id="form-login">
+      <label for="correo">Correo</label>
+      <input id="correo" type="email" autocomplete="username" required>
+      <label for="clave">Clave</label>
+      <input id="clave" type="password" autocomplete="current-password" required>
+      <button type="submit">Entrar</button>
+    </form>
+    <p id="aviso" class="aviso"></p>
+  </main>
+  <script type="module" src="js/paginas/login.js"></script>
+</body>
+</html>
