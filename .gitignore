@@ -1,0 +1,3 @@
+vantix-backend/target/
+*.class
+.DS_Store

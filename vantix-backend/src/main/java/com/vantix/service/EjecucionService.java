@@ -15,6 +15,7 @@ import com.vantix.repository.HallazgoRepository;
 import com.vantix.repository.UsuarioRepository;
 import com.vantix.security.UsuarioPrincipal;
 import com.vantix.tools.RunnerRegistry;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.Authentication;
@@ -41,12 +42,13 @@ public class EjecucionService {
     private final EjecutorProceso ejecutor;
     private final ParserRegistry parsers;
     private final AuditoriaService auditoria;
+    private final ObjectProvider<EjecucionService> propio;
 
     public EjecucionService(EjecucionRepository ejecuciones, HallazgoRepository hallazgos,
                             UsuarioRepository usuarios, CatalogoService catalogo,
                             ValidadorParametros validadorParametros, RunnerRegistry runners,
                             EjecutorProceso ejecutor, ParserRegistry parsers,
-                            AuditoriaService auditoria) {
+                            AuditoriaService auditoria, ObjectProvider<EjecucionService> propio) {
         this.ejecuciones = ejecuciones;
         this.hallazgos = hallazgos;
         this.usuarios = usuarios;
@@ -56,6 +58,7 @@ public class EjecucionService {
         this.ejecutor = ejecutor;
         this.parsers = parsers;
         this.auditoria = auditoria;
+        this.propio = propio;
     }
 
     private Usuario usuarioActual() {
@@ -124,7 +127,7 @@ public class EjecucionService {
         // volvemos a construir con runner para no parsear shell).
         AccionCatalogo accion = e.getAccion();
         List<String> args = runners.construir(accion.getCodigo(), e.getParametros());
-        correrAsync(e.getId(), accion.getCodigo(), args);
+        propio.getObject().correrAsync(e.getId(), accion.getCodigo(), args);
         return aDto(e);
     }
 
@@ -199,8 +202,13 @@ public class EjecucionService {
     }
 
     private Ejecucion obtener(Long id) {
-        return ejecuciones.findById(id)
+        Ejecucion e = ejecuciones.findById(id)
                 .orElseThrow(() -> new VantixException("Ejecución no encontrada", HttpStatus.NOT_FOUND));
+        Usuario u = usuarioActual();
+        if (!"ADMIN".equals(u.getRol().name()) && !e.getUsuario().getId().equals(u.getId())) {
+            throw new VantixException("Ejecución no encontrada", HttpStatus.NOT_FOUND);
+        }
+        return e;
     }
 
     private EjecucionDTO aDto(Ejecucion e) {
